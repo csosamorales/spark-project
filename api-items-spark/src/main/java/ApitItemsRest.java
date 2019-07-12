@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static spark.Spark.*;
 
@@ -20,12 +21,17 @@ public class ApitItemsRest {
             String maxPrice = request.queryParams("maxPrice");
 
 
-            List<Item> itemList = itemService.getItems(query,title,sort,order,minPrice,maxPrice,tag);
+            List<Item> itemList = itemService.getItems(query,sort,order,minPrice,maxPrice,tag);
 
 
 
             if(itemList != null){
-                return  new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(itemList)));
+                if(title != null && !title.isEmpty()){
+                    return  new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(itemList.stream().map(item -> item.getTitle()).collect(Collectors.toList()))));
+                }
+                else{
+                    return  new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(itemList)));
+                }
             }
             else {
                 return  new Gson().toJson(new StandardResponse(StatusResponse.ERROR, new Gson().toJsonTree("error al buscar items")));

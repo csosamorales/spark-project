@@ -25,6 +25,10 @@ public class Item {
         Tags = tags;
     }
 
+    public Item() {
+
+    }
+
     public String getId() {
         return id;
     }

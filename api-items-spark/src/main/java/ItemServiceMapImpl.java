@@ -17,7 +17,7 @@ public class ItemServiceMapImpl implements ItemService {
         getCurrencies();
     }
 
-    public List<Item> getItems(String q, String title, String sort, String orderBy, String minPriceRange, String maxPriceRange, String tag) throws IOException {
+    public List<Item> getItems(String q,  String sort, String orderBy, String minPriceRange, String maxPriceRange, String tag) throws IOException {
 
 
         List<Item> listaItems = new ArrayList<>();
@@ -25,48 +25,21 @@ public class ItemServiceMapImpl implements ItemService {
         boolean priceRange = minPriceRange != null && !minPriceRange.isEmpty() && maxPriceRange != null && !maxPriceRange.isEmpty();
         boolean sortKey = sort != null && !sort.isEmpty() && orderBy != null && !orderBy.isEmpty();
 
-        if(q != null && !q.isEmpty()){
+        if(q != null && !q.isEmpty()) {
 
             itemsMap.clear();
-
-            boolean filterTag = false;
-
-            q =  q.replace(" ","%20");
-            String url = "https://api.mercadolibre.com/sites/MLA/search?q="+q;
-
-            if(sortKey){
-                if(sort.equals("price")){
-                    url += "&sort=" + sort + "_" + orderBy;
-                } else {
-                    url += "&sort=" + sort;
-                }
-            }
-
-            if(priceRange){
-                if(tag != null && !tag.isEmpty()){
-                    //tengo que filtrar por tag "a mano"
-                    filterTag = true;
-                }
-                else {
-                    url += "&price="+minPriceRange+"-"+maxPriceRange;
-                }
-
-            }
-            else if(tag != null && !tag.isEmpty()){
-                url += "tag=good_quality_thumbnail";
-            }
+            q = q.replace(" ", "%20");
+            String url = "https://api.mercadolibre.com/sites/MLA/search?q=" + q;
 
             String result = Connection.getResultApi(url);
 
             listaItems = parseResponseToJson(result);
 
-            if (filterTag){
-                listaItems = listaItems.stream()
-                        .filter(x -> x.getTags().contains("good_quality_thumbnail"))
-                        .collect(Collectors.toList());
-            }
         }
-        else{
+        else {
+
+            listaItems = itemsMap.values().stream().collect(Collectors.toList());
+        }
 
             //trabajo sobre el hashmap
 
@@ -109,7 +82,7 @@ public class ItemServiceMapImpl implements ItemService {
                     }
                 }
 
-            }
+
 
         }
 
