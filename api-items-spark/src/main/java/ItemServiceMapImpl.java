@@ -19,12 +19,15 @@ public class ItemServiceMapImpl implements ItemService {
 
     public List<Item> getItems(String q, String title, String sort, String orderBy, String minPriceRange, String maxPriceRange, String tag) throws IOException {
 
+
         List<Item> listaItems = new ArrayList<>();
 
         boolean priceRange = minPriceRange != null && !minPriceRange.isEmpty() && maxPriceRange != null && !maxPriceRange.isEmpty();
         boolean sortKey = sort != null && !sort.isEmpty() && orderBy != null && !orderBy.isEmpty();
 
         if(q != null && !q.isEmpty()){
+
+            itemsMap.clear();
 
             boolean filterTag = false;
 
@@ -155,8 +158,9 @@ public class ItemServiceMapImpl implements ItemService {
         return  listaItems;
     }
 
-    public List<String> getItemsTitle(){
-        List<String> titulos = new ArrayList<>();
+    public List<String> getItemsTitle(List<Item> itemList){
+
+        List<String> titulos = itemList.stream().map(item -> item.getTitle()).collect(Collectors.toList());
 
         return  titulos;
     }
@@ -190,5 +194,25 @@ public class ItemServiceMapImpl implements ItemService {
 
         }
 
+    }
+
+    @Override
+    public Item getItem(String id) {
+        return itemsMap.get(id);
+    }
+
+    @Override
+    public Item addItem(Item item) {
+       return itemsMap.put(item.getId(),item);
+    }
+
+    @Override
+    public Item editItem(Item item) {
+        return itemsMap.put(item.getId(),item);
+    }
+
+    @Override
+    public Item deleteItem(String id) {
+        return itemsMap.remove(id);
     }
 }
