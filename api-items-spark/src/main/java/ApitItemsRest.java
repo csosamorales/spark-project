@@ -10,6 +10,8 @@ public class ApitItemsRest {
 
         final ItemService itemService = new ItemServiceMapImpl();
 
+        final ItemService itemServiceJson = new ItemServiceFromJsonImpl();
+
         get("/items", (request, response) -> {
             response.type("application/json");
             String query = request.queryParams("q");
@@ -19,11 +21,16 @@ public class ApitItemsRest {
             String tag = request.queryParams("tag");
             String minPrice = request.queryParams("minPrice");
             String maxPrice = request.queryParams("maxPrice");
+            String jsonFile = request.queryParams("json").toUpperCase();
 
+            List<Item> itemList;
 
-            List<Item> itemList = itemService.getItems(query,sort,order,minPrice,maxPrice,tag);
-
-
+            if(jsonFile != null && !jsonFile.isEmpty() && jsonFile.equals("TRUE")){
+                itemList = itemServiceJson.getItems(query,sort,order,minPrice,maxPrice,tag);
+            }
+            else {
+                itemList = itemService.getItems(query,sort,order,minPrice,maxPrice,tag);
+            }
 
             if(itemList != null){
                 if(title != null && !title.isEmpty()){
@@ -38,6 +45,7 @@ public class ApitItemsRest {
             }
 
         });
+
 
         put("/item", (request, response) -> {
             response.type("application/json");

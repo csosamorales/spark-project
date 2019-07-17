@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="grailsproject.SiteSpec" tests="1" skipped="0" failures="1" errors="0" timestamp="2019-07-15T18:14:45" hostname="AR0C02VR1ELHV2J" time="1.429">
+  <properties/>
+  <testcase name="test something" classname="grailsproject.SiteSpec" time="1.429">
+    <failure message="Condition not satisfied:&#10;&#10;true == false&#10;     |&#10;     false&#10;" type="org.spockframework.runtime.SpockComparisonFailure">Condition not satisfied:
+
+true == false
+     |
+     false
+
+	at grailsproject.SiteSpec.test something(SiteSpec.groovy:20)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

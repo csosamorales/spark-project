@@ -240,6 +240,6 @@ public class ItemServiceFromJsonImpl implements ItemService {
         itemsList.remove(item);
         writeOnJsonFile(itemsList);
         return item;
-        
+
     }
 }
