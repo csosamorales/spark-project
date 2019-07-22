@@ -20,7 +20,7 @@ func GetSiteFromAPI(siteID string) (*miapi.Site, *apierrors.ApiError) {
 
 }
 
-func GetSiteResultFromAPI(siteID string, wg * sync.WaitGroup) (*miapi.Site, *apierrors.ApiError) {
+func GetSiteResultFromAPI(siteID string, wg *sync.WaitGroup) (*miapi.Site, *apierrors.ApiError) {
 
 	site := &miapi.Site{
 		ID: siteID,
@@ -33,5 +33,21 @@ func GetSiteResultFromAPI(siteID string, wg * sync.WaitGroup) (*miapi.Site, *api
 	wg.Done()
 
 	return site, nil
+
+}
+
+func GetSiteResultChannelFromAPI(siteID string, resultChannel chan *miapi.Result, errorChannel chan *apierrors.ApiError) {
+
+	site := &miapi.Site{
+		ID: siteID,
+	}
+
+	result := miapi.Result{SiteResult: site}
+
+	if err := site.GetSite(); err != nil {
+		errorChannel <- err
+	}
+
+	resultChannel <- &result
 
 }

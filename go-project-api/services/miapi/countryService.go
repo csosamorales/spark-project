@@ -36,3 +36,18 @@ func GetCountryResultFromAPI(countryID string, wg *sync.WaitGroup) (*miapi.Count
 	return country, nil
 
 }
+
+func GetCountryResultChannelFromAPI(countryID string, resultChannel chan *miapi.Result, errorChannel chan *apierrors.ApiError) {
+
+	country := &miapi.Country{
+		ID: countryID,
+	}
+
+	if err := country.GetCountry(); err != nil {
+		errorChannel <- err
+	}
+
+	result := miapi.Result{ CountryResult: country}
+
+	resultChannel <- &result
+}
